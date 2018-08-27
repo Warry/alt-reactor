@@ -27,10 +27,11 @@ function elmMake(options) {
         const source = options.getSourceFromRequest(req)
         if (!source) return next()
 
+        const tempFile = path.join(tempDir, source, '.js')
         const compilation = spawn(elmPath, [
                 "make",
-                source,
-                "--output=" + path.join(tempDir, source, '.js'),
+                path.join('.', source),
+                "--output=" + tempFile,
                 "--report=json"
             ], { cwd: options.cwd })
 

@@ -1,9 +1,11 @@
 # Alternative Elm Reactor
 
 #### FEATURES
+- Compile elm files from url
 - Compiler errors in the browser
 - Static assets
-- Live-Reload
+- Live reload
+- Works with `Browser.Navigation`
 
 ## Usage
 
@@ -11,11 +13,12 @@
 
     --no-reload        Disable live reload
     --no-static        Disable static files
-    -p, --port <n>     Port number, default 8000
+    -t, --template <f> Template file (default: index.html)
+    -p, --port <n>     Port number (default: 8000)
 
 ```
 
-run `npx alt-reactor --help` within the same directory as your `elm.json`, then update your html template:
+run `npx alt-reactor --help` within the same directory as your `elm.json`, then update your `index.html` template:
 
 ### Compile elm files from url
 
@@ -38,6 +41,12 @@ Add this one-liner to reload each time any file is saved within your `elm.json`'
 <script type="text/javascript">new EventSource('/@live-reload').onmessage = function(event, path){ location.reload() }</script>
 ```
 
+### Static assets
+
+The whole directory is served, but live reload only works within your `elm.json`'s `source-directories`. 
+
+**All 404 display `index.html`**, so that you can use a custom router from `Browser.application`.
+
 ## Install
 
 ### As a cli:
@@ -58,18 +67,21 @@ $ npm i alt-reactor --save
 var reactor = require('alt-reactor')
 var app = require('connect')()
 
-// usage
+// these are the defaults:
 
 app.use(reactor.elmMake({
     cwd: process.cwd(),
     getSourceFromRequest: (req) =>
-        (req.url.endsWith('.elm') ? req.url : null) // calls next() if null
+        // by default, all url ending by ".elm" are compiled
+        // null triggers next()
+        (req.url.endsWith('.elm') ? req.url : null)
 }))
 
 app.use(reactor.liveReload({
+    url: '/@live-reload',
     cwd: process.cwd(),
     event: 'change',
-    watched: 'src/**.elm',
+    watched: 'src/',
     ignored: ['node_modules', 'elm-stuff']
 })) // all chokidar options are also valid.
 ```
