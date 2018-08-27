@@ -27,11 +27,10 @@ function elmMake(options) {
         const source = options.getSourceFromRequest(req)
         if (!source) return next()
 
-        const tempFile = path.join(tempDir, source, '.js')
         const compilation = spawn(elmPath, [
                 "make",
-                path.join(options.cwd, source),
-                "--output=" + tempFile,
+                source,
+                "--output=" + path.join(tempDir, source, '.js'),
                 "--report=json"
             ], { cwd: options.cwd })
 
@@ -58,6 +57,7 @@ function elmMake(options) {
 // Live reload
 function liveReload(options) {
     options = Object.assign({
+        url: '/@live-reload',
         cwd: process.cwd(),
         event: 'change',
         watched: 'src/',
@@ -65,7 +65,7 @@ function liveReload(options) {
     }, options || {})
 
     return (req, res, next) => {
-        if (req.url !== '/@live-reload') return next()
+        if (req.url !== options.url) return next()
 
         res.writeHead(200, {
             'Content-Type': 'text/event-stream',
@@ -73,12 +73,12 @@ function liveReload(options) {
             'Connection': 'keep-alive'
         })
 
+        var id = 0
         var watcher = chokidar.watch(options.watched, options).on(options.event, (event, path) => {
             res.write('id: ' + (id++) + '\\nevent: ' + event + '\ndata: ' + path)
             res.write('\n\n\n')
         })
 
-        var id = 0
         var t = setInterval(() => {
             res.write('ping\n\n')
         }, 5000)
