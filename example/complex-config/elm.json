@@ -1,8 +1,12 @@
 {
     "type": "application",
     "source-directories": [
-        "src", "bis", "reloadOnAssets"
+        "src", "otherSources", "reloadOnAssets"
     ],
+    "alt-reactor": {
+        "template": "reloadOnAssets/template.html",
+        "port": 7777
+    },
     "elm-version": "0.19.0",
     "dependencies": {
         "direct": {

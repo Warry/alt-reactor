@@ -15,6 +15,7 @@ module.exports = { elmMake, liveReload }
 
 // Compile elm files
 function elmMake(options) {
+    // Defaults
     options = Object.assign({
         cwd: process.cwd(),
         getSourceFromRequest: (req) =>
@@ -57,6 +58,7 @@ function elmMake(options) {
 
 // Live reload
 function liveReload(options) {
+    // Defaults
     options = Object.assign({
         url: '/@live-reload',
         cwd: process.cwd(),

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demo Live Reload</title>
+    <style type="text/css">
+
+	body {
+		background: #222;
+		color: #12e6c3;
+		font: 20px monospace;
+		padding: 30px;
+	}
+
+    </style>
+</head>
+<body>
+<div id="elm"></div>
+<script type="text/javascript" src="/src/Main.elm"></script>
+<script type="text/javascript">
+
+    Elm.Main.init({
+        node: document.getElementById("elm"),
+        flags: "world"
+    });
+
+</script>
+<script type="text/javascript">new EventSource('/@live-reload').onmessage = function(){ window.location.reload() }</script>
+</body>
+</html>

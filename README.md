@@ -7,9 +7,10 @@
 - Live reload
 - Works with `Browser.Navigation`
 
-## Usage
+## Try it
 
-```$ npx alt-reactor --help
+```bash
+$ npx alt-reactor --help
 
     --no-reload        Disable live reload
     --no-static        Disable static files
@@ -18,7 +19,9 @@
 
 ```
 
-run `npx alt-reactor --help` within the same directory as your `elm.json`, then update your `index.html` template:
+> `npx` is a utlity that comes with node and npm. It allows you to run a npm module (with bin), without installing it or even adding node_modules to your directory. It just dowloads it, runs it (caches it in your home for next time).
+
+run `npx alt-reactor` within the same directory as your `elm.json`, then update your `index.html` template along this lines:
 
 ### Compile elm files from url
 
@@ -47,12 +50,28 @@ The whole directory is served, but live reload only works within your `elm.json`
 
 **All 404 display `index.html`**, so that you can use a custom router from `Browser.application`.
 
+## Configure
+
+Use **`elm.json`** to durably configure alt-reactor, here are the defaults:
+
+```json
+{
+	... rest of the elm.json ...
+	"alt-reactor": {
+		"static": true,
+		"reload": true,
+		"template": "index.html",
+		"port": 8000
+	}
+}
+```
+
 ## Install
 
 ### As a cli:
 
 ```bash
-$ npx alt-reactor --help
+$ npm i alt-reactor -g
 ```
 
 ### As a HTTP middleware:
