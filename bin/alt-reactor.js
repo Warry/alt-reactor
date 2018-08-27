@@ -15,23 +15,14 @@ var elmJson
 try {
     elmJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'elm.json')))
 } catch (e) {
-    if (e.code === 'ENOENT') {
-        console.error(' No elm.json file at', e.path)
-        console.log('Do you want to initialize the directory? [Y/n]')
-        if (process.stdin.read() === "n"){
-            process.exit(1)
-        } else {
-            
-        }
-    } else {
-        console.error(' Something is wrong with the elm.json file:', '\n\n', e)
-        process.exit(1)
-    }
+    if (e.code === 'ENOENT') console.error(' No elm.json file at', e.path)
+    else console.error(' Something is wrong with the elm.json file:', '\n\n', e)
+    process.exit(1)
 }
 
 // Generate the cli
 program
-    .version('1.0.0')
+    .version('1.1.1')
     .option('--no-reload', 'Disable live reload')
     .option('--no-static', 'Disable static files')
     .option('-t, --template <f>', 'Template file', "index.html")
