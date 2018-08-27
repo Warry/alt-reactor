@@ -1,8 +1,13 @@
 {
   "name": "alt-reactor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Alternative Elm Reactor",
+  "homepage": "https://github.com/Warry/alt-reactor",
+  "repository": "Warry/alt-reactor",
   "main": "index.js",
+  "bin": {
+    "alt-reactor": "./bin/alt-reactor.js"
+  },
   "dependencies": {
     "chokidar": "^2.0.4",
     "commander": "^2.17.1",
