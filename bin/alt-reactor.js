@@ -22,11 +22,6 @@ const app = connect()
 // Compile **/*.elm
 app.use(reactor.elmMake())
 
-// Static files
-if (program.static) {
-    app.use(serveStatic(process.cwd(), { index: program.template }))
-}
-
 // Live reload
 if (program.reload) {
     var watched
@@ -39,10 +34,17 @@ if (program.reload) {
     app.use(reactor.liveReload({ watched }))
 }
 
-// 404
-app.use((req,res) =>
-    fs.createReadStream(path.join(process.cwd(), program.template)).pipe(res)
-)
+// Static files
+if (program.static) {
+    app.use(serveStatic(process.cwd(), { index: program.template }))
+
+    // 404
+    app.use((req,res, next) =>
+        fs.createReadStream(path.join(process.cwd(), program.template), 'utf-8')
+            .on('error', next)
+            .pipe(res)
+    )
+}
 
 // Start
 http.createServer(app).listen(program.port || 8000)
