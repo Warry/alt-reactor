@@ -50,22 +50,6 @@ The whole directory is served, but live reload only works within your `elm.json`
 
 **All 404 display `index.html`**, so that you can use a custom router from `Browser.application`.
 
-## Configure
-
-Use **`elm.json`** to durably configure alt-reactor, here are the defaults:
-
-```json
-{
-	... rest of the elm.json ...
-	"alt-reactor": {
-		"static": true,
-		"reload": true,
-		"template": "index.html",
-		"port": 8000
-	}
-}
-```
-
 ## Install
 
 ### As a cli:

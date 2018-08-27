@@ -15,9 +15,18 @@ var elmJson
 try {
     elmJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'elm.json')))
 } catch (e) {
-    if (e.code === 'ENOENT') console.error(' No elm.json file at', e.path)
-    else console.error(' Something is wrong with the elm.json file:', '\n\n', e)
-    process.exit(1)
+    if (e.code === 'ENOENT') {
+        console.error(' No elm.json file at', e.path)
+        console.log('Do you want to initialize the directory? [Y/n]')
+        if (process.stdin.read() === "n"){
+            process.exit(1)
+        } else {
+            
+        }
+    } else {
+        console.error(' Something is wrong with the elm.json file:', '\n\n', e)
+        process.exit(1)
+    }
 }
 
 // Generate the cli
@@ -29,31 +38,28 @@ program
     .option('-p, --port <n>', 'Port number', 8000)
     .parse(process.argv)
 
-// Setup configration
-const config = Object.assign(program, elmJson['alt-reactor'] || {})
-
 // Compile **/*.elm
 app.use(reactor.elmMake())
 
 // Live reload
-if (config.reload) {
+if (program.reload) {
     app.use(reactor.liveReload({
         watched: elmJson['source-directories']
     }))
 }
 
 // Static files
-if (config.static) {
-    app.use(serveStatic(process.cwd(), { index: config.template }))
+if (program.static) {
+    app.use(serveStatic(process.cwd(), { index: program.template }))
 
     // 404 is template
     app.use((req,res, next) =>
-        fs.createReadStream(path.join(process.cwd(), config.template), 'utf-8')
+        fs.createReadStream(path.join(process.cwd(), program.template), 'utf-8')
             .on('error', next)
             .pipe(res)
     )
 }
 
 // Start
-http.createServer(app).listen(config.port)
-console.log(' Server started on http://[::]:' + (config.port))
+http.createServer(app).listen(program.port)
+console.log(' Server started on http://[::]:' + (program.port))
