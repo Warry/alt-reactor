@@ -6,7 +6,6 @@ const { spawn } = require('child_process')
 const temp = require('temp').track()
 const chokidar = require('chokidar')
 
-const elmPath = path.join(process.cwd(), 'node_modules/.bin/elm')
 const errorPath = path.join(__dirname, 'src/ElmCompilerErrorStandalone.js')
 const errorScript = fs.readFileSync(errorPath, 'utf-8')
 const tempDir = temp.path()
@@ -29,7 +28,7 @@ function elmMake(options) {
         if (!source) return next()
 
         const tempFile = path.join(tempDir, source, '.js')
-        const compilation = spawn(elmPath, [
+        const compilation = spawn("elm", [
                 "make",
                 path.join('.', source),
                 "--output=" + tempFile,
